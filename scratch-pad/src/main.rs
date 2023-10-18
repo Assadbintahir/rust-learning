@@ -1,40 +1,18 @@
-struct User {
-    age: i64,
-    isActive: bool,
-    name: String,
-    email: String,
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
 }
 
 fn main() {
-    // Ex-1: string mutability
-    let mut message = String::from("Hello, World!");
-    let word = first_word(&message);
-    println!("{}", word);
-
-    // Ex-2: struct mutability
-    let user1 = User {
-        age: 28,
-        isActive: true,
-        name: String::from("Asad Ullah"),
-        email: String::from("asad.u@outlook.com"),
-    };
-
-    let user2 = User {
-        name: String::from("Asad"),
-        ..user1
-    };
-
-    println!("{}", user2.email);
-}
-
-fn first_word(message: &String) -> &str {
-    let bytes = message.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &message[0..i];
-        }
+    let string1 = String::from("long string is long");
+    let string2 = String::from("xyz");
+    let result;
+    {
+        result = longest(string1.as_str(), string2.as_str());
     }
 
-    return &message;
+    println!("The longest string is {}", result);
 }
