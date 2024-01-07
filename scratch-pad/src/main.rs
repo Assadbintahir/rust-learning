@@ -1,18 +1,20 @@
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+use std::sync::{Arc, Mutex};
+use std::thread;
 
 fn main() {
-    let string1 = String::from("long string is long");
-    let string2 = String::from("xyz");
-    let result;
-    {
-        result = longest(string1.as_str(), string2.as_str());
+    let my_vec = Arc::new(Mutex::new(vec![]));
+
+    let handles = (0..10).map(|number| {
+        let cloned_vec = my_vec.clone();
+        thread::spawn(move || {
+            let mut vector = cloned_vec.lock().unwrap();
+            vector.push(number);
+        })
+    });
+
+    for handle in handles {
+        handle.join().unwrap();
     }
 
-    println!("The longest string is {}", result);
+    println!("{:?}", my_vec.lock().unwrap());
 }
